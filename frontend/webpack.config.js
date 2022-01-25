@@ -1,5 +1,6 @@
 const mode = process.env.NODE_ENV || "development";
-const path = require('path');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const path = require("path");
 
 module.exports = {
 	mode: mode,
@@ -7,15 +8,40 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /\.ts$/,
+				test: /\.tsx?$/,
 				exclude: /node_modules/,
 				use: { loader: "ts-loader" },
 			},
+			{
+				test: /\.css$/i,
+				use: ["style-loader", "css-loader"],
+			},
+			{
+				test: /\.(png|svg|jpg|jpeg|gif)$/i,
+				type: "asset/resource",
+			},
+			{
+				test: /\.(woff|woff2|eot|ttf|otf)$/i,
+				type: "asset/resource",
+			},
 		],
 	},
-	devtool: "source-map",
+	devtool: "inline-source-map",
 	resolve: {
-		extensions: [".js", ".ts"],
+		extensions: [".tsx", ".js", ".ts"],
+	},
+	plugins: [
+		new HtmlWebpackPlugin({
+			filename: "index.html",
+			inject: "head",
+			title: "Test app",
+			templateContent: `<html><body id="App"></body></html>`,
+		}),
+	],
+	output: {
+		filename: "bundle.js",
+		path: path.resolve(__dirname, "dist"),
+		clean: true,
 	},
 	devServer: {
 		static: {

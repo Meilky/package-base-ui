@@ -1,5 +1,6 @@
 /frontend/node_modules/
 /frontend/dist/
+/frontend/assets/
 
 /backend/target/
 /backend/bin/
