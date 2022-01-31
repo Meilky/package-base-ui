@@ -19,6 +19,7 @@ export abstract class BaseComponent implements Component {
 		this.children = [];
 		this.element = props.element;
 		this.propreties = { ...props, ...defaultProps };
+		this.render = this.render.bind(this);
 	}
 
 	protected beforeRender() {}

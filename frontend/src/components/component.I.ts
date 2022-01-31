@@ -21,7 +21,6 @@ export interface Props {
 	render?: DeepPartial<Propreties["render"]>;
 }
 
-
 export interface DefaultProps {
 	render: Propreties["render"];
 }

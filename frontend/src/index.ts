@@ -1,4 +1,5 @@
 import { App } from "./components/app";
+import { SizeStore } from "./stores/stores";
 
 let app = document.getElementById("App");
 
@@ -10,6 +11,7 @@ let appComponent = new App();
 
 app.appendChild(appComponent.get());
 
-window.addEventListener('resize', () => {
-	appComponent.render()
+window.addEventListener("resize", () => {
+	SizeStore.data.width.value = window.innerWidth;
+	SizeStore.data.heigth.value = window.innerHeight;
 });
