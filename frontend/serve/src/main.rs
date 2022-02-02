@@ -2,10 +2,10 @@
 
 #[get("/")]
 fn index() -> String {
-    format!("Hello world! big brain")
+   format!("Hello, world!")
 }
 
 #[launch]
 fn rocket() -> _ {
-    rocket::build().mount("/api", routes![index])
+    rocket::build().mount("/", routes![index])
 }
