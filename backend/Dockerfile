@@ -20,14 +20,19 @@ WORKDIR /backend
 
 RUN rustup override set nightly
 
+RUN echo "fn main() {}" > dummy.rs
+COPY ./Cargo.toml .
+RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
+RUN cargo build --release
+RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
+
 COPY ./src ./src
 COPY ./Cargo.lock .
 COPY ./Cargo.toml .
 COPY ./Rocket.toml .
 
-RUN ls -la
 
-RUN cargo build --release
+RUN cargo install --path . --root . --force
 
 ####################################################################################################
 ## Final image
@@ -41,7 +46,7 @@ COPY --from=builder /etc/group /etc/group
 WORKDIR /api
 
 # Copy our build
-COPY --from=builder /backend/target/release/backend /usr/local/bin/backend
+COPY --from=builder /backend/bin/backend /usr/local/bin/backend
 COPY ./Rocket.toml .
 
 # Use an unprivileged user.

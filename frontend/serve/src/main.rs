@@ -2,7 +2,7 @@
 
 #[get("/")]
 fn index() -> String {
-   format!("Hello, world!")
+   format!("Hello, world! askdjflaskjdflkjasldfklaskjdflakjsfldk")
 }
 
 #[launch]

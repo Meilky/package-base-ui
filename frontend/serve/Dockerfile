@@ -1,29 +1,55 @@
-FROM rust:1.58 as build
+FROM rust:latest AS builder
 
-# create a new empty shell project
-RUN USER=root cargo new --bin serve
+RUN update-ca-certificates
+
+# Create appuser
+ENV USER=api
+ENV UID=10001
+
+RUN adduser \
+    --disabled-password \
+    --gecos "" \
+    --home "/nonexistent" \
+    --shell "/sbin/nologin" \
+    --no-create-home \
+    --uid "${UID}" \
+    "${USER}"
+
+
 WORKDIR /serve
 
-# copy over your manifests
-COPY ./Cargo.toml ./Cargo.toml
-COPY ./Rocket.toml ./Rocket.toml
+RUN rustup override set nightly
 
-# this build step will cache your dependencies
+RUN echo "fn main() {}" > dummy.rs
+COPY ./Cargo.toml .
+RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
 RUN cargo build --release
-RUN rm src/*.rs
+RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
 
-# copy your source tree
 COPY ./src ./src
+COPY ./Cargo.lock .
+COPY ./Cargo.toml .
+COPY ./Rocket.toml .
 
-# build for release
-RUN rm ./target/release/deps/serve*
-RUN cargo build --release
 
-# our final base
+RUN cargo install --path . --root . --force
+
+####################################################################################################
+## Final image
+####################################################################################################
 FROM debian:bookworm-slim
 
-# copy the build artifact from the build stage
-COPY --from=build /serve/target/release/serve .
+# Import from builder.
+COPY --from=builder /etc/passwd /etc/passwd
+COPY --from=builder /etc/group /etc/group
 
-# set the startup command to run your binary
-CMD ["./serve"]
+WORKDIR /api
+
+# Copy our build
+COPY --from=builder /serve/bin/serve /usr/local/bin/serve
+COPY ./Rocket.toml .
+
+# Use an unprivileged user.
+USER api:api
+
+CMD ["serve"]
