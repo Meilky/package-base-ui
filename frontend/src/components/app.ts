@@ -10,5 +10,7 @@ export class App extends BaseComponent {
 		this.appendChildren();
 	}
 
-	public onRender() {}
+	public onRender(): void {
+		return
+	}
 }
