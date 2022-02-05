@@ -6,7 +6,7 @@ export class App extends BaseComponent {
 	constructor() {
 		super({ element: document.createElement("div") });
 
-		this.children = [new TopBar(),new NavBar()];
+		this.children = [new TopBar(), new NavBar()];
 
 		this.appendChildren();
 	}

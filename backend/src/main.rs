@@ -10,13 +10,29 @@ struct Package {
 }
 
 #[get("/")]
-fn index() -> Json<Package> {
-    let package: Package = Package {
-        name: String::from("lol"),
-        description: String::from("kalsfdjlaskj")
+fn index() -> Json<Vec<Package>> {
+    let mut vec: Vec<Package> = Vec::new();
+
+    let package1: Package = Package {
+        name: String::from("package 1"),
+        description: String::from("description package 1")
     };
 
-    Json(package)
+    let package2: Package = Package {
+        name: String::from("package 2"),
+        description: String::from("description package 2")
+    };
+
+    let package3: Package = Package {
+        name: String::from("package 3"),
+        description: String::from("description package 3")
+    };
+
+    vec.push(package1);
+    vec.push(package2);
+    vec.push(package3);
+
+    Json(vec)
 }
 
 #[launch]

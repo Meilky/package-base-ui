@@ -1,6 +1,6 @@
 import { StateFullComponent } from "./../state-full-component";
 import { TopBar as TopBarStyle } from "./style.module.css";
-import { SizeStore } from "../../stores/stores";
+import SizeStore from "../../stores/size";
 
 export class TopBar extends StateFullComponent<{ size: typeof SizeStore }> {
 	constructor() {
@@ -10,8 +10,6 @@ export class TopBar extends StateFullComponent<{ size: typeof SizeStore }> {
 				size: SizeStore,
 			},
 		});
-
-		this.stores.size.addListerner(this.render);
 
 		this.element.className = TopBarStyle;
 	}

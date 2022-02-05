@@ -8,6 +8,10 @@ export abstract class StateFullComponent<T extends { [key: string]: Store<any> }
 	constructor(props: StateFullPropreties<T>) {
 		super(props);
 		this.stores = props.stores;
+
+		for(const store in this.stores) {
+			this.stores[store].addListerner(this.render);
+		}
 	}
 
 	protected abstract onRender(): void;

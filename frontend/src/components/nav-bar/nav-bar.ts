@@ -1,19 +1,36 @@
 import { StateFullComponent } from "./../state-full-component";
-import { PackageStore } from "../../stores/stores";
+import PackagesStore from "../../stores/packages";
+import { Package } from "stores/stores.I";
 
-export class NavBar extends StateFullComponent<{ package: typeof PackageStore }> {
+export class NavBar extends StateFullComponent<{ packages: typeof PackagesStore }> {
 	constructor() {
 		super({
 			element: document.createElement("div"),
 			stores: {
-				package: PackageStore,
+				packages: PackagesStore,
 			},
 		});
+	}
 
-		this.stores.package.addListerner(this.render);
+	protected beforeRender(): void {
+		this.element.innerHTML = "";
 	}
 
 	public onRender(): void {
-		this.element.innerText = "name :"+this.stores.package.value.name + " description :" + this.stores.package.value.description;
+		for (const p of this.stores.packages.value) {
+			this.element.innerHTML += navBarItem(p);
+		}
 	}
 }
+
+const navBarItem = (props: Package): string => {
+	let item: string = "<div>";
+
+	const name = `<h3>${props.name}</h3>`;
+	const description = `<p>${props.description}</p>`;
+
+	item += name + description;
+	item += "</div>";
+
+	return item;
+};

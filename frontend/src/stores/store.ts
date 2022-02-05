@@ -1,4 +1,4 @@
-export class Store<T> {
+export abstract class Store<T> {
 	protected _value: T;
 	protected listeners: ((value: any) => void)[];
 
@@ -13,10 +13,12 @@ export class Store<T> {
 		}
 	}
 
-	constructor(defaultValue: T) {
-		this._value = defaultValue;
+	constructor() {
+		this._value = this.init();
 		this.listeners = [];
 	}
+
+	protected abstract init(): T;
 
 	public addListerner(callback: (value: any) => void): void {
 		this.listeners.push(callback);
