@@ -11,16 +11,14 @@ export class TopBar extends StateFullComponent<{ size: typeof SizeStore }> {
 			},
 		});
 
-		this.stores.size.data.width.addListerner(this.render);
-		this.stores.size.data.heigth.addListerner(this.render);
+		this.stores.size.addListerner(this.render);
 
 		this.element.className = TopBarStyle;
 	}
 
-	public onRender() {
-		let viewport_width = this.stores.size.data.width.value;
-		let viewport_height = this.stores.size.data.heigth.value;
+	public onRender(): void {
+		const size = this.stores.size.value;
 
-		this.element.innerText = "Package App " + viewport_width.toString() + "," + viewport_height.toString();
+		this.element.innerText = "Package App " + size.width.toString() + "," + size.heigth.toString();
 	}
 }

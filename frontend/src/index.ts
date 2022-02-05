@@ -12,6 +12,5 @@ const appComponent = new App();
 app.appendChild(appComponent.get());
 
 window.addEventListener("resize", () => {
-	SizeStore.data.width.value = window.innerWidth;
-	SizeStore.data.heigth.value = window.innerHeight;
+	SizeStore.value = { width: window.innerWidth, heigth: window.innerHeight };
 });

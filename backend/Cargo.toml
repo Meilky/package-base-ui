@@ -10,4 +10,11 @@ name = "backend"
 path = "src/main.rs"
 
 [dependencies]
-rocket = { version = "0.5.0-rc.1", features = ["tls", "json"] }
+
+[dependencies.rocket]
+version = "0.5.0-rc.1"
+features = ["json"]
+
+[dependencies.serde]
+version = "1.0.136"
+features = ["derive"]
