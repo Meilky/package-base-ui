@@ -7,7 +7,7 @@ const defaultProps: DefaultProps = {
 	},
 };
 
-export abstract class BaseComponent implements Component {
+export abstract class StateLessComponent implements Component {
 	protected element: HTMLElement;
 	protected children: Component[];
 	protected isMobile: boolean;
@@ -19,34 +19,23 @@ export abstract class BaseComponent implements Component {
 		this.children = [];
 		this.element = props.element;
 		this.propreties = { ...props, ...defaultProps };
-		this.render = this.render.bind(this);
+		this.init = this.init.bind(this);
+		this.remove = this.remove.bind(this);
 	}
 
-	protected beforeRender() {}
+	public abstract init(): void;
 
-	public render() {
-		if (this.isRendered()) {
-			this.beforeRender();
-			this.onRender();
-			this.afterRender();
-		} else this.element.style.display = "none";
-	}
+	protected beforeRemove() {}
 
-	protected abstract onRender(): void;
-
-	protected afterRender() {}
-
-	protected beforeDestroy() {}
-
-	public destroy() {
-		this.beforeDestroy();
-		this.destroyChildren();
+	public remove() {
+		this.beforeRemove();
+		this.removeChildren();
 		this.removeElement();
-		this.afterDestroy();
+		this.afterRemove();
 	}
 
-	protected destroyChildren() {
-		for (const child of this.children) child.destroy();
+	protected removeChildren() {
+		for (const child of this.children) child.remove();
 	}
 
 	protected removeElement() {
@@ -55,10 +44,9 @@ export abstract class BaseComponent implements Component {
 		}
 	}
 
-	protected afterDestroy() {}
+	protected afterRemove() {}
 
 	public get(): HTMLElement {
-		this.render();
 		return this.element;
 	}
 
@@ -66,7 +54,7 @@ export abstract class BaseComponent implements Component {
 		return (this.isMobile && this.propreties.render.mobile) || (!this.isMobile && this.propreties.render.desktop);
 	}
 
-	protected appendChildren(): void {
+	protected appenChildren(): void {
 		for (const child of this.children) {
 			this.element.append(child.get());
 		}

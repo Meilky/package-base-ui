@@ -1,6 +1,7 @@
-import { StateFullComponent } from "./../state-full-component";
+import { StateFullComponent } from "../../lib/components/state-full-component";
 import PackagesStore from "../../stores/packages";
-import { Package } from "stores/stores.I";
+import { Package } from "../../stores/stores.I";
+import { StateLessComponent } from "../../lib/components/component";
 
 export class NavBar extends StateFullComponent<{ packages: typeof PackagesStore }> {
 	constructor() {
@@ -10,27 +11,42 @@ export class NavBar extends StateFullComponent<{ packages: typeof PackagesStore 
 				packages: PackagesStore,
 			},
 		});
+
+		this.init();
 	}
 
-	protected beforeRender(): void {
-		this.element.innerHTML = "";
+	public init(): void {
+		this.update();
 	}
 
-	public onRender(): void {
-		for (const p of this.stores.packages.value) {
-			this.element.innerHTML += navBarItem(p);
+	protected beforeUpdate(): void {
+		this.children = [];
+	}
+
+	public onUpdate(): void {
+		const packages = this.stores.packages.value;
+		for (const pack of packages) {
+			this.children.push(new NavBarItem(pack));
 		}
 	}
 }
 
-const navBarItem = (props: Package): string => {
-	let item: string = "<div>";
+class NavBarItem extends StateLessComponent {
+	protected item: Package;
 
-	const name = `<h3>${props.name}</h3>`;
-	const description = `<p>${props.description}</p>`;
+	constructor(props: Package) {
+		super({
+			element: document.createElement("div"),
+		});
 
-	item += name + description;
-	item += "</div>";
+		this.item = props;
+		this.init();
+	}
 
-	return item;
-};
+	public init(): void {
+		const name = `<h3>${this.item.name}</h3>`;
+		const description = `<p>${this.item.description}</p>`;
+
+		this.element.innerHTML = name + description;
+	}
+}

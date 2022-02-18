@@ -4,8 +4,8 @@ export interface Component {
 	readonly propreties: Propreties;
 
 	get(): HTMLElement;
-	render(): void;
-	destroy(): void;
+	init(): void;
+	remove(): void;
 }
 
 export interface Propreties {

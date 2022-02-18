@@ -1,5 +1,9 @@
 #!/bin/bash
 
-./frontend/build.sh
+cd ./frontend/
+
+npm run build
+
+cd ..
 
 docker compose build

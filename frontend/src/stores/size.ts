@@ -1,17 +1,15 @@
 import { Size } from "./stores.I";
-import { Store } from "./store";
+import { BaseStore } from "../lib/stores/store";
 
-class SizeStore extends Store<Size> {
+class SizeStore extends BaseStore<Size> {
 	constructor() {
-		super();
-	}
-
-	protected init(): Size {
-		return {
+		super({
 			width: window.innerWidth,
 			heigth: window.innerHeight,
-		};
+		});
 	}
+
+	public init(): void {}
 }
 
 export default new SizeStore();

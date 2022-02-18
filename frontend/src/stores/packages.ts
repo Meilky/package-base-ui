@@ -1,16 +1,20 @@
 import { Package } from "./stores.I";
-import { Store } from "./store";
+import { BaseStore } from "../lib/stores/store";
 
-class PackagesStore extends Store<Package[]> {
+class PackagesStore extends BaseStore<Package[]> {
 	constructor() {
-		super();
+		super([]);
 	}
 
-	protected init(): Package[] {
-		return [];
+	public async init(): Promise<void> {
+		const res = await fetch("/api/");
+		const packages = await res.json();
+
+		this.value = packages;
 	}
 }
 
+const s = new PackagesStore();
+s.init();
 
-
-export default new PackagesStore();
+export default s;
