@@ -1,7 +1,0 @@
-/frontend/node_modules/
-/frontend/dist/
-/frontend/assets/
-/frontend/.cache/
-
-/backend/target/
-/backend/bin/

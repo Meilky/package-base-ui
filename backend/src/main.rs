@@ -1,5 +1,8 @@
+use std::path::Path;
+
 use rocket::serde::json::Json;
 use serde::{Serialize,Deserialize};
+use dotenv;
 
 #[macro_use] extern crate rocket;
 
@@ -37,5 +40,7 @@ fn index() -> Json<Vec<Package>> {
 
 #[launch]
 fn rocket() -> _ {
+    dotenv::from_path(Path::new("/etc/package-base-ui/environement")).expect(".env file not found");
+    println!("MYVAR: {}", dotenv::var("MYVAR").unwrap());
     rocket::build().mount("/api", routes![index])
 }

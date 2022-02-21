@@ -10,6 +10,8 @@ services:
       - "4000:4000"
     networks:
       - app-network
+    volumes:
+      - ./backend/environement:/etc/package-base-ui/environement
   nginx:
     container_name: nginx
     hostname: nginx
