@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd ./frontend/
+cd ./pkgui-frontend/
 
 npm run build
 

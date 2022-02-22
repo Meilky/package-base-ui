@@ -1,31 +1,31 @@
 services:
-  api:
-    container_name: api
-    hostname: api
+  pkgui-server:
+    container_name: pkgui-server
+    hostname: pkguiserver
     build:
-      context: ./backend
+      context: ./pkgui-server
       dockerfile: Dockerfile
     restart: always
     ports:
       - "4000:4000"
     networks:
-      - app-network
+      - pkgui-server-network
     volumes:
-      - ./backend/environement:/etc/package-base-ui/environement
-  nginx:
-    container_name: nginx
-    hostname: nginx
+      - ./pkgui-server.env:/etc/pkgui-server/pkgui-server.env
+  pkgui-nginx:
+    container_name: pkgui-nginx
+    hostname: pkguinginx
     image: nginx:1.21
     restart: always
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
-      - ./frontend/dist/:/var/www/
-      - ./frontend/assets/:/var/assets/
+      - ./pkgui-frontend/dist/:/var/www/dist/
+      - ./pkgui-frontend/assets/:/var/www/assets/
     ports:
-      - "80:80"
+      - "${PORT}:80"
     networks:
-      - app-network
+      - pkgui-server-network
 
 networks:
-  app-network:
+  pkgui-server-network:
     driver: bridge
